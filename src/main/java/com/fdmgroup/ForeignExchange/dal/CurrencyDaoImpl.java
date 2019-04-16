@@ -73,7 +73,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 	public List<Currency> getCurrencyList() {
 		List<Currency> currencyList = null;
 		EntityManager em = getEntityManager();
-		Query query = em.createQuery("SELECT c from Currency c ", Currency.class);
+		Query query = em.createQuery("SELECT c from Currency c", Currency.class);
 		try {
 			currencyList = (List<Currency>) query.getResultList();
 		} catch (Exception e) {
