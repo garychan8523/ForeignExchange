@@ -35,13 +35,13 @@ public class AccountDaoImpl implements AccountDao {
 	public int addAccountByUser(User user) {
 		Account accountadd = new Account();
 		int count = 0;
+		
 		for (Currency c : currencyDaoImpl.getCurrencyList()) {
 			accountadd.setUser(user);
 			accountadd.setCurrency(c);
 			accountadd.setBalance(0.0d); // initial account balance equals to 0
 			count += addAccount(accountadd);
 		}
-
 		return count;
 	}
 
@@ -86,7 +86,7 @@ public class AccountDaoImpl implements AccountDao {
 	public Account getUserCurrencyAccount(User user, Currency currency) {
 		Account userCurrecyAccountList = null;
 		EntityManager em = getEntityManager();
-		Query query = em.createQuery("SELECT a from Account a WHERE a.USERID = :userID AND a.CURRENCYID = :currencyId",
+		Query query = em.createQuery("SELECT a from Account a WHERE a.USERID = :userId AND a.CURRENCYID = :currencyId",
 				Account.class);
 		query.setParameter("userId", user.getUserId());
 		query.setParameter("currencyId", currency.getCurrencyId());
@@ -103,12 +103,17 @@ public class AccountDaoImpl implements AccountDao {
 
 	@Override
 	public int removeAccountsByUser(User user) {
-		int rows;
 		EntityManager em = getEntityManager();
-		Query query = em.createQuery("DELETE a from Account a WHERE a.USERID = :userID", Account.class);
-		query.setParameter("userId", user.getUserId());
+		EntityTransaction et = em.getTransaction();
+		int rows;
+		Query query;
+
 		try {
+			et.begin();
+			query = em.createQuery("DELETE a from Account a WHERE a.USERID = :userId", Account.class);
+			query.setParameter("userId", user.getUserId());
 			rows = query.executeUpdate();
+			et.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -122,6 +127,7 @@ public class AccountDaoImpl implements AccountDao {
 	public int removeAccount(Account account) {
 		EntityManager em = getEntityManager();
 		EntityTransaction et = em.getTransaction();
+		
 		try {
 			et.begin();
 			em.remove(account);

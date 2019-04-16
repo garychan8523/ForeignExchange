@@ -25,7 +25,7 @@ public class UserDaoImplTest {
 	private EntityManagerFactory mockEmf;
 
 	@InjectMocks
-	private UserDaoImpl userDao = new UserDaoImpl();
+	private UserDaoImpl userDaoImpl = new UserDaoImpl();
 
 	@Before
 	public void initMocks() {
@@ -33,7 +33,7 @@ public class UserDaoImplTest {
 	}
 
 	@Test
-	public void given_uesr_when_updateUser_then_persist_related_procedures_should_be_called() {
+	public void given_user_when_updateUser_then_persist_related_procedures_should_be_called() {
 		// Arrange
 		EntityManager mockEm = mock(EntityManager.class);
 		EntityTransaction mockEt = mock(EntityTransaction.class);
@@ -45,7 +45,7 @@ public class UserDaoImplTest {
 		when(mockEm.getTransaction()).thenReturn(mockEt);
 
 		// Act
-		userDao.addUser(mockUser);
+		userDaoImpl.addUser(mockUser);
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockEt);
@@ -77,7 +77,7 @@ public class UserDaoImplTest {
 		when(mockQuery.getSingleResult()).thenReturn(mockUser);
 
 		// Act
-		userDao.getUser("dummy");
+		userDaoImpl.getUser("dummy");
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockEt, mockQuery);
@@ -104,10 +104,8 @@ public class UserDaoImplTest {
 		when(mockQuery.setParameter("username", "dummy")).thenReturn(mockQuery);
 		when(mockQuery.executeUpdate()).thenReturn(1);
 
-		// when(mockEm.find(User.class, mockUser.getUserid())).thenReturn(mockUser);
-
 		// Act
-		userDao.removeUser("dummy");
+		userDaoImpl.removeUser("dummy");
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockEt, mockQuery);
@@ -136,7 +134,7 @@ public class UserDaoImplTest {
 		when(mockEm.find(User.class, mockUser.getUserId())).thenReturn(mockUser);
 
 		// Act
-		userDao.updateUser(mockUser);
+		userDaoImpl.updateUser(mockUser);
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockEt, mockUser);
@@ -166,7 +164,7 @@ public class UserDaoImplTest {
 		when(mockQuery.getResultList()).thenReturn(null);
 
 		// Act
-		userDao.getUserList();
+		userDaoImpl.getUserList();
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockQuery);
