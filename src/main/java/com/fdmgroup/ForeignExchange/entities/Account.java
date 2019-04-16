@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Check;
+
 @Entity
 
 @Table(name = "fx_account")
@@ -27,6 +29,7 @@ public class Account {
 	private Currency currency;
 
 	@Column(nullable = false)
+	@Check(constraints = "balance >= 0")
 	private Double balance;
 
 	public Account() {

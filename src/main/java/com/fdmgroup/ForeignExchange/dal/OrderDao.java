@@ -9,14 +9,12 @@ import com.fdmgroup.ForeignExchange.entities.User;
 
 public interface OrderDao {
 
-	public void addOrder(Order order);
-
-	public Order getOrder(Long orderId);
+	public int addOrder(Order order);
 
 	public List<Order> getOrderListByUserStatus(User user, Status status);
 
 	public List<Order> getActiveOrderList(Type type, int limit);
 
-	public void updateOrder(Order order);
+	public int updateOrder(Order order);
 
 }

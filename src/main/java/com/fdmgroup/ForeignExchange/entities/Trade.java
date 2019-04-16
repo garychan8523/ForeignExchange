@@ -90,12 +90,17 @@ public class Trade {
 				t1date = format.parse(t1.getTimestamp());
 				t2date = format.parse(t2.getTimestamp());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			return t2date.compareTo(t1date);
 		}
 	};
+
+	@Override
+	public String toString() {
+		return "Trade [tradeId=" + tradeId + ", user=" + user + ", order=" + order + ", amount=" + amount
+				+ ", timestamp=" + timestamp + "]";
+	}
 
 }

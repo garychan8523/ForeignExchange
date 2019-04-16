@@ -17,6 +17,11 @@ import com.fdmgroup.ForeignExchange.entities.User;
 @Component
 public class UserDaoImpl implements UserDao {
 
+	public UserDaoImpl(EntityManagerFactory emf) {
+		super();
+		this.emf = emf;
+	}
+
 	@Autowired
 	private EntityManagerFactory emf;
 
@@ -53,7 +58,7 @@ public class UserDaoImpl implements UserDao {
 		Query query;
 
 		try {
-			query = em.createQuery("SELECT u FROM User u where u.username = :username", User.class);
+			query = em.createQuery("SELECT u FROM User u where u.userName = :username", User.class);
 			query.setParameter("username", username);
 			user = (User) query.getSingleResult();
 		} catch (Exception e) {

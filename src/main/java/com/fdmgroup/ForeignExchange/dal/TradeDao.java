@@ -8,7 +8,7 @@ import com.fdmgroup.ForeignExchange.entities.User;
 
 public interface TradeDao {
 
-	public void addTrade(Trade trade);
+	public int addTrade(Trade trade);
 
 	public List<Trade> getTradeList(int limit);
 

@@ -18,6 +18,11 @@ public class CurrencyDaoImpl implements CurrencyDao {
 	@Autowired
 	private EntityManagerFactory emf;
 
+	public CurrencyDaoImpl(EntityManagerFactory emf) {
+		super();
+		this.emf = emf;
+	}
+
 	public CurrencyDaoImpl() {
 		super();
 	}
