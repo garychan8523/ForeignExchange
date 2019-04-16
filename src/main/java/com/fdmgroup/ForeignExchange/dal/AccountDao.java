@@ -10,7 +10,7 @@ public interface AccountDao {
 
 	public int addAccountByUser(User user);
 
-	public void addAccount(Account account);
+	public int addAccount(Account account);
 
 	public List<Account> getAccountListByUser(User user);
 
@@ -18,7 +18,7 @@ public interface AccountDao {
 
 	public int removeAccountsByUser(User user);
 
-	public void removeUserCurrencyAccount(Account account);
+	public int removeAccount(Account account);
 
-	public void updateAccount(Account account);
+	public int updateAccount(Account account);
 }

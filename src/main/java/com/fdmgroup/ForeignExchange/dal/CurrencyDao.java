@@ -6,7 +6,7 @@ import com.fdmgroup.ForeignExchange.entities.Currency;
 
 public interface CurrencyDao {
 
-	public void addCurrency(Currency currency);
+	public int addCurrency(Currency currency);
 
 	public Currency getCurrency(String currencyName);
 
