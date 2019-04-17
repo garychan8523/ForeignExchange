@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fdmgroup.ForeignExchange.entities.Currency;
 import com.fdmgroup.ForeignExchange.entities.Order;
 import com.fdmgroup.ForeignExchange.entities.Order.Status;
 import com.fdmgroup.ForeignExchange.entities.Order.Type;
@@ -82,9 +83,9 @@ public class OrderDaoImpl implements OrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Order> getActiveOrderList(Type type, int limit) {
+	public List<Order> getActiveOrderListByTypeCurrency(Type type, Currency currencyBuy, Currency currencySell,
+			int limit) {
 		EntityManager em;
-		Query query;
 		List<Order> orderList = null;
 
 		try {
@@ -95,8 +96,12 @@ public class OrderDaoImpl implements OrderDao {
 		}
 
 		try {
-			query = em.createQuery("SELECT o from Order o WHERE o.type = :type AND rownum <= :limit", Order.class);
+			Query query = em.createQuery(
+					"SELECT o from Order o WHERE o.type = :type and o.currencyBuy = :currencyBuy and o.currencySell = :currencySell and rownum <= :limit",
+					Order.class);
 			query.setParameter("type", type);
+			query.setParameter("currencyBuy", currencyBuy);
+			query.setParameter("currencySell", currencySell);
 			query.setParameter("limit", limit);
 			orderList = (List<Order>) query.getResultList();
 		} catch (Exception e) {

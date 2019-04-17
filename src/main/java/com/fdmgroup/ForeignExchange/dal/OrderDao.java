@@ -2,6 +2,7 @@ package com.fdmgroup.ForeignExchange.dal;
 
 import java.util.List;
 
+import com.fdmgroup.ForeignExchange.entities.Currency;
 import com.fdmgroup.ForeignExchange.entities.Order;
 import com.fdmgroup.ForeignExchange.entities.Order.Status;
 import com.fdmgroup.ForeignExchange.entities.Order.Type;
@@ -13,7 +14,7 @@ public interface OrderDao {
 
 	public List<Order> getOrderListByUserStatus(User user, Status status);
 
-	public List<Order> getActiveOrderList(Type type, int limit);
+	public List<Order> getActiveOrderListByTypeCurrency(Type type, Currency currencyBuy,Currency currencySell, int limit);
 
 	public int updateOrder(Order order);
 
