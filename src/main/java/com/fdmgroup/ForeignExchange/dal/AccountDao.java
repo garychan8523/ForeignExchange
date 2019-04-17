@@ -8,8 +8,6 @@ import com.fdmgroup.ForeignExchange.entities.User;
 
 public interface AccountDao {
 
-	public int addAccountByUser(User user);
-
 	public int addAccount(Account account);
 
 	public List<Account> getAccountListByUser(User user);
