@@ -8,9 +8,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ForeignExchange.entities.Currency;
 
+@Component
 public class CurrencyDaoImpl implements CurrencyDao {
 	@Autowired
 	private EntityManagerFactory emf;
@@ -55,7 +57,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 	}
 
 	@Override
-	public Currency getCurrency(String currencyName) {
+	public Currency getCurrency(String currencyCode) {
 		EntityManager em;
 		Query query;
 		Currency currency = null;
@@ -68,8 +70,8 @@ public class CurrencyDaoImpl implements CurrencyDao {
 		}
 
 		try {
-			query = em.createQuery("SELECT c from Currency c WHERE c.currencyName = :currencyName", Currency.class);
-			query.setParameter("currencyName", currencyName);
+			query = em.createQuery("SELECT c from Currency c WHERE c.currencyCode = :currencyCode", Currency.class);
+			query.setParameter("currencyCode", currencyCode);
 			currency = (Currency) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();

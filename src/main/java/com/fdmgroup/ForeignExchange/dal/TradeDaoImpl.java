@@ -14,12 +14,14 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ForeignExchange.entities.Currency;
 import com.fdmgroup.ForeignExchange.entities.Order;
 import com.fdmgroup.ForeignExchange.entities.Trade;
 import com.fdmgroup.ForeignExchange.entities.User;
 
+@Component
 public class TradeDaoImpl implements TradeDao {
 
 	public TradeDaoImpl(EntityManagerFactory emf) {
@@ -66,7 +68,7 @@ public class TradeDaoImpl implements TradeDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Trade> getTradeList(int limit) {
+	public List<Trade> getTradeList(Long limit) {
 		EntityManager em;
 		Query query;
 		List<Trade> tradeList = null;

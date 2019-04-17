@@ -8,7 +8,7 @@ public interface CurrencyDao {
 
 	public int addCurrency(Currency currency);
 
-	public Currency getCurrency(String currencyName);
+	public Currency getCurrency(String currencyCode);
 
 	public List<Currency> getCurrencyList();
 

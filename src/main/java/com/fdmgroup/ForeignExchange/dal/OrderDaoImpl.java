@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ForeignExchange.entities.Currency;
 import com.fdmgroup.ForeignExchange.entities.Order;
@@ -15,7 +16,9 @@ import com.fdmgroup.ForeignExchange.entities.Order.Status;
 import com.fdmgroup.ForeignExchange.entities.Order.Type;
 import com.fdmgroup.ForeignExchange.entities.User;
 
+@Component
 public class OrderDaoImpl implements OrderDao {
+
 	@Autowired
 	private EntityManagerFactory emf;
 
@@ -25,6 +28,11 @@ public class OrderDaoImpl implements OrderDao {
 
 	public EntityManager getEntityManager() {
 		return emf.createEntityManager();
+	}
+
+	public OrderDaoImpl(EntityManagerFactory emf) {
+		super();
+		this.emf = emf;
 	}
 
 	@Override
@@ -84,7 +92,7 @@ public class OrderDaoImpl implements OrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Order> getActiveOrderListByTypeCurrency(Type type, Currency currencyBuy, Currency currencySell,
-			int limit) {
+			Long limit) {
 		EntityManager em;
 		List<Order> orderList = null;
 

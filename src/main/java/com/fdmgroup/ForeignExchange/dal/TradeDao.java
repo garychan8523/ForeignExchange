@@ -10,7 +10,7 @@ public interface TradeDao {
 
 	public int addTrade(Trade trade);
 
-	public List<Trade> getTradeList(int limit);
+	public List<Trade> getTradeList(Long limit);
 
 	public List<Trade> getTradeListByUserCurrency(User user, Currency currency);
 	

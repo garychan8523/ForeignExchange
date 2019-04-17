@@ -8,11 +8,13 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ForeignExchange.entities.Account;
 import com.fdmgroup.ForeignExchange.entities.Currency;
 import com.fdmgroup.ForeignExchange.entities.User;
 
+@Component
 public class AccountDaoImpl implements AccountDao {
 
 	@Autowired

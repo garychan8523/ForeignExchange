@@ -14,7 +14,7 @@ public interface OrderDao {
 
 	public List<Order> getOrderListByUserStatus(User user, Status status);
 
-	public List<Order> getActiveOrderListByTypeCurrency(Type type, Currency currencyBuy,Currency currencySell, int limit);
+	public List<Order> getActiveOrderListByTypeCurrency(Type type, Currency currencyBuy,Currency currencySell, Long limit);
 
 	public int updateOrder(Order order);
 

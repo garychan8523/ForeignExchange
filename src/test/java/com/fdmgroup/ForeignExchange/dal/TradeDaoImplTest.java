@@ -71,7 +71,7 @@ public class TradeDaoImplTest {
 		when(mockQuery.getResultList()).thenReturn(null);
 
 		// Act
-		tradeDaoImpl.getTradeList(10);
+		tradeDaoImpl.getTradeList(10L);
 
 		// Assert or Verify
 		InOrder inOrder = Mockito.inOrder(mockEmf, mockEm, mockQuery);
