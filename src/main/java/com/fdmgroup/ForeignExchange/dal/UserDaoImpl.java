@@ -35,8 +35,16 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int addUser(User user) {
-		EntityManager em = getEntityManager();
-		EntityTransaction et = em.getTransaction();
+		EntityManager em;
+		EntityTransaction et;
+
+		try {
+			em = getEntityManager();
+			et = em.getTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 
 		try {
 			et.begin();
@@ -53,9 +61,16 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public User getUser(String username) {
-		User user = null;
-		EntityManager em = getEntityManager();
+		EntityManager em;
 		Query query;
+		User user = null;
+
+		try {
+			em = getEntityManager();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return user;
+		}
 
 		try {
 			query = em.createQuery("SELECT u FROM User u where u.userName = :username", User.class);
@@ -63,6 +78,7 @@ public class UserDaoImpl implements UserDao {
 			user = (User) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return user;
 		} finally {
 			em.close();
 		}
@@ -93,11 +109,20 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int updateUser(User user) {
-		EntityManager em = getEntityManager();
-		EntityTransaction et = em.getTransaction();
+		EntityManager em;
+		EntityTransaction et;
+		User oldUser;
 
 		try {
-			User oldUser = em.find(User.class, user.getUserId());
+			em = getEntityManager();
+			et = em.getTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		try {
+			oldUser = em.find(User.class, user.getUserId());
 			et.begin();
 			oldUser.setEmail(user.getEmail());
 			oldUser.setPassword(user.getPassword());
@@ -114,11 +139,19 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getUserList() {
-		EntityManager em = getEntityManager();
+		EntityManager em;
+		TypedQuery<User> query;
 		ArrayList<User> resultList = null;
 
-		TypedQuery<User> query = em.createQuery("SELECT u from User u", User.class);
 		try {
+			em = getEntityManager();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return resultList;
+		}
+
+		try {
+			query = em.createQuery("SELECT u from User u", User.class);
 			resultList = (ArrayList<User>) query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

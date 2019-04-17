@@ -2,13 +2,10 @@ package com.fdmgroup.ForeignExchange.dal;
 
 import java.util.List;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
-import javax.persistence.RollbackException;
-import javax.persistence.TransactionRequiredException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,15 +30,22 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
 	@Override
 	public int addCurrency(Currency currency) {
-		EntityManager em = getEntityManager();
-		EntityTransaction et = em.getTransaction();
+		EntityManager em;
+		EntityTransaction et;
+
+		try {
+			em = getEntityManager();
+			et = em.getTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 
 		try {
 			et.begin();
 			em.persist(currency);
 			et.commit();
-		} catch (IllegalStateException | EntityExistsException | RollbackException | IllegalArgumentException
-				| TransactionRequiredException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		} finally {
@@ -52,16 +56,24 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
 	@Override
 	public Currency getCurrency(String currencyName) {
+		EntityManager em;
+		Query query;
 		Currency currency = null;
-		EntityManager em = getEntityManager();
-		Query query = em.createQuery("SELECT c from Currency c WHERE c.currencyName = :currencyName", Currency.class);
-		query.setParameter("currencyName", currencyName);
 
 		try {
+			em = getEntityManager();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return currency;
+		}
+
+		try {
+			query = em.createQuery("SELECT c from Currency c WHERE c.currencyName = :currencyName", Currency.class);
+			query.setParameter("currencyName", currencyName);
 			currency = (Currency) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return currency;
 		} finally {
 			em.close();
 		}
@@ -71,14 +83,23 @@ public class CurrencyDaoImpl implements CurrencyDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Currency> getCurrencyList() {
+		EntityManager em;
+		Query query;
 		List<Currency> currencyList = null;
-		EntityManager em = getEntityManager();
-		Query query = em.createQuery("SELECT c from Currency c", Currency.class);
+
 		try {
+			em = getEntityManager();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return currencyList;
+		}
+
+		try {
+			query = em.createQuery("SELECT c from Currency c", Currency.class);
 			currencyList = (List<Currency>) query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return currencyList;
 		} finally {
 			em.close();
 		}
