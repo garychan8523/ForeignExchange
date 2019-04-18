@@ -24,12 +24,9 @@ public class SignupController {
 			model.addAttribute("msg", "Name taken");
 		} else {
 			signupService.registerUser(signupFormUser);
+			model.addAttribute("msg", "Registered successfully " + signupFormUser.getUserName());
 		}
 		
-		if (frompage != null) {
-			return "redirect:" + frompage;
-		} else {
-			return "index";
-		}
+		return "index";
 	}
 }

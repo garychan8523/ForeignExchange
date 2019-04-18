@@ -76,8 +76,8 @@ public class OrderDaoImpl implements OrderDao {
 		}
 
 		try {
-			query = em.createQuery("SELECT o from Order o WHERE o.USERID = :userID AND status = :status", Order.class);
-			query.setParameter("userId", user.getUserId());
+			query = em.createQuery("SELECT o from Order o WHERE o.user = :user AND status = :status", Order.class);
+			query.setParameter("user", user);
 			query.setParameter("status", status);
 			orderList = (List<Order>) query.getResultList();
 		} catch (Exception e) {

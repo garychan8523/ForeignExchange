@@ -50,11 +50,7 @@ public class LoginController {
 			if (authUser == null) {
 				model.addAttribute("msg", "User not found");
 				model.addAttribute("fromuri", frompage);
-				if (frompage != null) {
-					return "redirect:" + frompage;
-				} else {
-					return "index";
-				}
+				return "index";
 			} else {
 
 				session.setAttribute("username", authUser.getUserName());

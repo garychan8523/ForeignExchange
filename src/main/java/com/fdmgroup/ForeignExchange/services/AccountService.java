@@ -22,7 +22,7 @@ public class AccountService {
 		for (Currency c : currencyDaoImpl.getCurrencyList()) {
 			accountadd.setUser(user);
 			accountadd.setCurrency(c);
-			accountadd.setBalance(0.0d); // initial account balance equals to 0
+			accountadd.setBalance(0.0D); // initial account balance equals to 0
 			count += accountDaoImpl.addAccount(accountadd);
 		}
 		return count;

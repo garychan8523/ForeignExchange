@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 
 <html lang="en">
 <head>
@@ -13,7 +14,8 @@
 <title>Foreign Exchange</title>
 
 <link href="bootstrap.min.css" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+<link href='//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'/>
 
 <style>
 .bd-placeholder-img {
@@ -216,9 +218,20 @@
 			</nav>
 
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<c:if test="${msg.length() > 0}">
+					<div class="alert alert-warning alert-dismissible fade show"
+						role="alert" style="margin-top: 20px;">
+						<strong>${msg}</strong>
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</c:if>
+
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3"
-				style="margin-top: 10px; width: 75%;">
+				style="margin-top: 10px;">
 
 				<h5>
 					Welcome,
@@ -230,41 +243,36 @@
 					}
 				%>
 				</h5>
-				<div class="btn-toolbar mb-2 mb-md-0">
 
-					<div class="dropdown">
-						<a class="btn btn-outline-secondary btn-sm dropdown-toggle"
-							href="#" role="button" id="dropdownMenuLink"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span data-feather="corner-left-up"></span>USD
-						</a>
+				<div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 100px;">
 
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<a class="dropdown-item" href="#">CAD</a> <a
-								class="dropdown-item" href="#">GBP</a> <a class="dropdown-item"
-								href="#">JPY</a>
-						</div>
-					</div>
+					<select class="selectpicker currencyBuyPicker" data-width="fit" data-live-search="true" onchange="location.href = '/ForeignExchange/?currencyBuyCode=' + $('select.currencyBuyPicker').val() + '&currencySellCode=' + $('select.currencySellPicker').val()">
+						<c:forEach items='${sessionScope.currencyList}' var="entry">
+							<c:if test='${entry.currencyCode == currencyBuyCode}'>
+								<option data-subtext="Buy" selected>${entry.currencyCode}</option>
+							</c:if>
+							<c:if test='${entry.currencyCode != currencyBuyCode}'>
+								<option data-subtext="Buy">${entry.currencyCode}</option>
+							</c:if>
+						</c:forEach>
+					</select>
 
-					<div class="dropdown">
-						<a class="btn btn-outline-secondary btn-sm dropdown-toggle"
-							href="#" role="button" id="dropdownMenuLink"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span data-feather="corner-right-down"></span>HKD
-						</a>
-
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<a class="dropdown-item" href="#">CAD</a> <a
-								class="dropdown-item" href="#">GBP</a> <a class="dropdown-item"
-								href="#">JPY</a>
-						</div>
-					</div>
+					<select class="selectpicker currencySellPicker" data-width="fit" data-live-search="true" onchange="location.href = '/ForeignExchange/?currencyBuyCode=' + $('select.currencyBuyPicker').val() + '&currencySellCode=' + $('select.currencySellPicker').val()">
+						<c:forEach items='${sessionScope.currencyList}' var="entry">
+							<c:if test='${entry.currencyCode == currencySellCode}'>
+								<option data-subtext="Sell" selected>${entry.currencyCode}</option>
+							</c:if>
+							<c:if test='${entry.currencyCode != currencySellCode}'>
+								<option data-subtext="Sell">${entry.currencyCode}</option>
+							</c:if>
+						</c:forEach>
+					</select>
 
 				</div>
 			</div>
 
 			<!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
-			
+			<div style="display: flex;">
 			<div class="table-responsive"
 				style="width: 40%; display: inline-block;">
 				<h6>Last Trade</h6>
@@ -280,12 +288,13 @@
 						</tr>
 					</thead>
 					<tbody>
+						
 						<c:forEach items="${tradeList}" var="entry">
 							<tr>
 								<td>${entry.timestamp}</td>
-								<td>${entry.amount}</td>
-								<td>${entry.order.rate}</td>
-								<td>sell amount</td>
+								<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.amount}"/></td>
+								<td><strong><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.order.rate}"/></strong></td>
+								<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.amount*entry.order.rate}"/></td>
 								<td>${entry.order.currencyBuy.currencyCode}</td>
 								<td>${entry.order.currencySell.currencyCode}</td>
 							</tr>
@@ -295,11 +304,9 @@
 				</table>
 			</div>
 
-
-			<div style="width: 50%; display: inline-block; margin-left: 30px;">
-				<h6>Order Book</h6>
-				<table class="table table-striped table-sm"
-					style="width: 33%; display: inline-block;">
+			<div style="width: 50%; display: flex; flex-wrap: wrap; margin-left: 30px;">
+				<h6 style="flex: 0 0 100%;" >Order Book</h6>
+				<table class="table table-striped table-sm" style="width: 50%;">
 					<thead>
 						<tr>
 							<th>Value</th>
@@ -310,16 +317,15 @@
 					<tbody>
 						<c:forEach items="${activeBuyOrder}" var="entry">
 							<tr>
-								<td>times</td>
-								<td>${entry.currentAmount}</td>
-								<td>${entry.rate}</td>
+								<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.rate*entry.currentAmount}"/></td>
+								<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.currentAmount}"/></td>
+								<td><strong><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.rate}"/></strong></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 
-				<table class="table table-striped table-sm"
-					style="width: 33%; display: inline-block;">
+				<table class="table table-striped table-sm" style="width: calc(50% - 20px); margin-left: 20px;">
 					<thead>
 						<tr>
 							<th>Ask</th>
@@ -330,15 +336,15 @@
 					<tbody>
 					<c:forEach items="${activeSellOrder}" var="entry">
 						<tr>
-							<td>${entry.rate}</td>
-							<td>${entry.currentAmount}</td>
-							<td>times</td>
+							<td><strong><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.rate}"/></strong></td>
+							<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.currentAmount}"/></td>
+							<td><fmt:formatNumber type="number" minFractionDigits="6" maxFractionDigits="6" value="${entry.rate*entry.currentAmount}"/></td>
 						</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
-			
+			</div>
 			</main>
 		</div>
 	</div>
@@ -353,11 +359,14 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+		
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.21.0/feather.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-	<script src="dashboard.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+	<!-- <script type="text/javascript" src="dashboard.js"></script> -->
 </body>
 </html>
