@@ -26,12 +26,14 @@ public class IndexController {
 	@Autowired
 	private CurrencyDaoImpl currencyDaoImpl;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String renderHome(HttpSession session, @ModelAttribute(value = "login_user") User loginFormBlankUser,
+	@RequestMapping(value = "/")
+	public String renderHome(HttpSession session, 
 			@RequestParam(value = "currencyBuyCode", required = false) String currencyBuyCode,
 			@RequestParam(value = "currencySellCode", required = false) String currencySellCode,
+			@ModelAttribute(value = "login_user") User loginFormBlankUser,
 			@ModelAttribute(value = "signup_user") User signupFormBlankUser, Model model) {
 
+		// initialise currency pair for first time user
 		if (session.getAttribute("currencyBuyCode") == null) {
 			session.setAttribute("currencyBuyCode", "USD");
 		}
@@ -42,14 +44,11 @@ public class IndexController {
 		if (currencyBuyCode != null) {
 			session.setAttribute("currencyBuyCode", currencyBuyCode);
 		}
-		
 		if (currencySellCode != null) {
 			session.setAttribute("currencySellCode", currencySellCode);
 		}
-
 		if (session.getAttribute("currencyBuyCode").equals(session.getAttribute("currencySellCode"))) {
 			model.addAttribute("msg", "please choose different currency pair");
-			model.addAttribute("fromurl", "/");
 		}
 		
 		session.setAttribute("currencyList", currencyDaoImpl.getCurrencyList());

@@ -243,30 +243,36 @@
 					}
 				%>
 				</h5>
-
+				
 				<div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 100px;">
 
-					<select class="selectpicker currencyBuyPicker" data-width="fit" data-live-search="true" onchange="location.href = '/ForeignExchange/?currencyBuyCode=' + $('select.currencyBuyPicker').val() + '&currencySellCode=' + $('select.currencySellPicker').val()">
+				<form action="" method="post" name="setCurrencyForm">
+				
+			<!-- location.href = '/ForeignExchange/?currencyBuyCode=' + $('select.currencyBuyPicker').val() + '&currencySellCode=' + $('select.currencySellPicker').val() -->
+				
+					<select name="currencyBuyCode" class="selectpicker currencyBuyPicker" data-width="fit" data-live-search="true" onchange="document.setCurrencyForm.submit()">
 						<c:forEach items='${sessionScope.currencyList}' var="entry">
 							<c:if test='${entry.currencyCode == currencyBuyCode}'>
-								<option data-subtext="Buy" selected>${entry.currencyCode}</option>
+								<option value="${entry.currencyCode}" data-subtext="Buy" selected>${entry.currencyCode}</option>
 							</c:if>
 							<c:if test='${entry.currencyCode != currencyBuyCode}'>
-								<option data-subtext="Buy">${entry.currencyCode}</option>
+								<option value="${entry.currencyCode}" data-subtext="Buy">${entry.currencyCode}</option>
 							</c:if>
 						</c:forEach>
 					</select>
 
-					<select class="selectpicker currencySellPicker" data-width="fit" data-live-search="true" onchange="location.href = '/ForeignExchange/?currencyBuyCode=' + $('select.currencyBuyPicker').val() + '&currencySellCode=' + $('select.currencySellPicker').val()">
+					<select name="currencySellCode" class="selectpicker currencySellPicker" data-width="fit" data-live-search="true" onchange="document.setCurrencyForm.submit()">
 						<c:forEach items='${sessionScope.currencyList}' var="entry">
 							<c:if test='${entry.currencyCode == currencySellCode}'>
-								<option data-subtext="Sell" selected>${entry.currencyCode}</option>
+								<option value="${entry.currencyCode}" data-subtext="Sell" selected>${entry.currencyCode}</option>
 							</c:if>
 							<c:if test='${entry.currencyCode != currencySellCode}'>
-								<option data-subtext="Sell">${entry.currencyCode}</option>
+								<option value="${entry.currencyCode}" data-subtext="Sell">${entry.currencyCode}</option>
 							</c:if>
 						</c:forEach>
 					</select>
+				
+				</form>
 
 				</div>
 			</div>
